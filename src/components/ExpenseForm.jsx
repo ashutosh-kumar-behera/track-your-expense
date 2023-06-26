@@ -1,28 +1,23 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 export const ExpenseForm = ({ setExpenses }) => {
 
-  const [expense, setExpense] = useState({
-    title: "",
-    category: "",
-    amount: "",
-  });
-
-  const handleOnChange=(e)=>{
-    setExpense({...expense, [e.target.id]: e.target.value})
-  }
+  const titleRef = useRef();
+  const categoryRef = useRef();
+  const amountRef = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setExpenses((prevState) => [
       ...prevState,
-      { ...expense, id: crypto.randomUUID() },
+      {
+        title: titleRef.current.value,
+        category: categoryRef.current.value,
+        amount: amountRef.current.value,
+        id: crypto.randomUUID(),
+      },
     ]);
-    setExpense({
-      title: "",
-      category: "",
-      amount: "",
-    });
+    e.target.reset();  
   };
 
   return (
@@ -32,8 +27,7 @@ export const ExpenseForm = ({ setExpenses }) => {
         <input
           id="title"
           name="title"
-          value={expense.title}
-          onChange={handleOnChange}
+          ref={titleRef}
         />
       </div>
       <div className="input-container">
@@ -41,8 +35,7 @@ export const ExpenseForm = ({ setExpenses }) => {
         <select
           id="category"
           name="category"
-          value={expense.category}
-          onChange={handleOnChange}
+          ref={categoryRef}
         >
           <option value="" hidden>
             Select Category
@@ -59,8 +52,7 @@ export const ExpenseForm = ({ setExpenses }) => {
         <input
           id="amount"
           name="amount"
-          value={expense.amount}
-          onChange={handleOnChange}
+          ref={amountRef}
         />
       </div>
       <button className="add-btn">Add</button>
