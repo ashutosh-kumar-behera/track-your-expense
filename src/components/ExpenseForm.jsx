@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 
 export const ExpenseForm = ({ setExpenses }) => {
+
   const [expense, setExpense] = useState({
     title: "",
     category: "",
     amount: "",
   });
+
+  const handleOnChange=(e)=>{
+    setExpense({...expense, [e.target.id]: e.target.value})
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,9 +33,7 @@ export const ExpenseForm = ({ setExpenses }) => {
           id="title"
           name="title"
           value={expense.title}
-          onChange={(e) =>
-            setExpense((prevState) => ({ ...prevState, title: e.target.value }))
-          }
+          onChange={handleOnChange}
         />
       </div>
       <div className="input-container">
@@ -39,12 +42,7 @@ export const ExpenseForm = ({ setExpenses }) => {
           id="category"
           name="category"
           value={expense.category}
-          onChange={(e) =>
-            setExpense((prevState) => ({
-              ...prevState,
-              category: e.target.value,
-            }))
-          }
+          onChange={handleOnChange}
         >
           <option value="" hidden>
             Select Category
@@ -62,12 +60,7 @@ export const ExpenseForm = ({ setExpenses }) => {
           id="amount"
           name="amount"
           value={expense.amount}
-          onChange={(e) =>
-            setExpense((prevState) => ({
-              ...prevState,
-              amount: e.target.value,
-            }))
-          }
+          onChange={handleOnChange}
         />
       </div>
       <button className="add-btn">Add</button>
