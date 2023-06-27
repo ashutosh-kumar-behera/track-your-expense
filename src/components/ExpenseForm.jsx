@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Input } from "./Input";
+import { Select } from "./Select";
 
 export const ExpenseForm = ({ setExpenses }) => {
 
@@ -6,6 +8,7 @@ export const ExpenseForm = ({ setExpenses }) => {
     title: "",
     category: "",
     amount: "",
+    email:""
   });
 
   const handleOnChange=(e)=>{
@@ -17,24 +20,47 @@ export const ExpenseForm = ({ setExpenses }) => {
 
   const [error, setError]=useState({});
 
+ const validationConfig = {
+   title: [
+     { required: true, message: "Please enter title" },
+     { minLength: 5, message: "Title should be at least 5 characters long" },
+   ],
+   category: [{ required: true, message: "Please select a category" }],
+   amount: [{ required: true, message: "Please enter an amount" },
+            { pattern: /^[0-9]*$/, message:"Please enter only number"}
+  ],
+   email: [
+     { required: true, message: "Please enter an email" },
+     {
+       pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+       message: "Please enter a valid email",
+     },
+   ],
+ };
+
   const validate=(formData)=>{
-    const errorData={};
+    const errorsData = {};
+    
+    Object.entries(formData).forEach(([key, value])=>{
+        validationConfig[key].some((rule)=>{
+          if (rule.required && !value) {
+            errorsData[key] = rule.message;
+            return true;
+          }
+          if(rule.minLength && value.length < 5){
+            errorsData[key] = rule.message;
+            return true;
+          }
+          if (rule.pattern && !rule.pattern.test(value)) {
+            errorsData[key] = rule.message;
+            return true;
+          }
 
-    if(!formData.title){
-      errorData.title="Title is require"
-    }
+        })
+    })
 
-    if(!formData.category){
-      errorData.category = "Category is require"
-    }
-
-    if(!formData.amount){
-      errorData.amount = "Amount is require"
-    }
-
-    setError(errorData);
-
-    return errorData;
+    setError(errorsData);
+    return errorsData;
   }
 
 
@@ -53,50 +79,46 @@ export const ExpenseForm = ({ setExpenses }) => {
       title: "",
       category: "",
       amount: "",
+      email:""
     });
   };
 
   return (
     <form className="expense-form" onSubmit={handleSubmit}>
-      <div className="input-container">
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          name="title"
-          value={expense.title}
-          onChange={handleOnChange}
-        />
-        <p className="error">{error.title}</p>
-      </div>
-      <div className="input-container">
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          name="category"
-          value={expense.category}
-          onChange={handleOnChange}
-        >
-          <option value="" hidden>
-            Select Category
-          </option>
-          <option value="Grocery">Grocery</option>
-          <option value="Clothes">Clothes</option>
-          <option value="Bills">Bills</option>
-          <option value="Education">Education</option>
-          <option value="Medicine">Medicine</option>
-        </select>
-        <p className="error">{error.category}</p>
-      </div>
-      <div className="input-container">
-        <label htmlFor="amount">Amount</label>
-        <input
-          id="amount"
-          name="amount"
-          value={expense.amount}
-          onChange={handleOnChange}
-        />
-        <p className="error">{error.amount}</p>
-      </div>
+      <Input
+        id={"title"}
+        name={"title"}
+        value={expense.title}
+        error={error.title}
+        onChange={handleOnChange}
+        label={"Title"}
+      />
+      <Select
+        id={"category"}
+        name={"category"}
+        value={expense.category}
+        error={error.category}
+        onChange={handleOnChange}
+        label={"Category"}
+        options={['Grocery', 'Clothes', 'Bills', 'Education', 'Medicine']}
+      />
+      <Input
+        id={"amount"}
+        name={"amount"}
+        value={expense.amount}
+        error={error.amount}
+        onChange={handleOnChange}
+        label={"Amount"}
+      />
+      <Input
+        id={"email"}
+        name={"email"}
+        value={expense.email}
+        error={error.email}
+        onChange={handleOnChange}
+        label={"Email"}
+      />
+
       <button className="add-btn">Add</button>
     </form>
   );
