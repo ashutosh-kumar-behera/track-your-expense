@@ -7,8 +7,7 @@ export const ExpenseForm = ({ setExpenses }) => {
   const [expense, setExpense] = useState({
     title: "",
     category: "",
-    amount: "",
-    email:""
+    amount: ""
   });
 
   const handleOnChange=(e)=>{
@@ -32,7 +31,7 @@ export const ExpenseForm = ({ setExpenses }) => {
    email: [
      { required: true, message: "Please enter an email" },
      {
-       pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+       pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
        message: "Please enter a valid email",
      },
    ],
@@ -42,7 +41,7 @@ export const ExpenseForm = ({ setExpenses }) => {
     const errorsData = {};
     
     Object.entries(formData).forEach(([key, value])=>{
-        validationConfig[key].some((rule)=>{
+        validationConfig[key].some((rule) => {
           if (rule.required && !value) {
             errorsData[key] = rule.message;
             return true;
@@ -78,8 +77,7 @@ export const ExpenseForm = ({ setExpenses }) => {
     setExpense({
       title: "",
       category: "",
-      amount: "",
-      email:""
+      amount: ""
     });
   };
 
@@ -109,14 +107,6 @@ export const ExpenseForm = ({ setExpenses }) => {
         error={error.amount}
         onChange={handleOnChange}
         label={"Amount"}
-      />
-      <Input
-        id={"email"}
-        name={"email"}
-        value={expense.email}
-        error={error.email}
-        onChange={handleOnChange}
-        label={"Email"}
       />
 
       <button className="add-btn">Add</button>

@@ -1,23 +1,31 @@
-import React from 'react'
+import React from "react";
 
-export const Select = ({ id, name, value, error, onChange, label, options }) => {
+export const Select=({
+  label,
+  id,
+  name,
+  value,
+  onChange,
+  options,
+  defaultOption,
+  error,
+})=>{
   return (
     <div className="input-container">
       <label htmlFor={id}>{label}</label>
-      <select
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-      >
-        <option value="" hidden>Select Category</option>
-        {options.map((option,index)=>{
-            return(
-                <option value={option} key={index}>{option}</option>
-            )
-        })}
+      <select id={id} name={name} value={value} onChange={onChange}>
+        {defaultOption && (
+          <option value="" hidden>
+            {defaultOption}
+          </option>
+        )}
+        {options.map((option, i) => (
+          <option key={i} value={option}>
+            {option}
+          </option>
+        ))}
       </select>
       <p className="error">{error}</p>
     </div>
   );
-};
+}
