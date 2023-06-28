@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export const ExpenseTable = ({expense}) => {
+
+  const[category, setCategory]=useState("")
+  const filterData =  expense.filter((el)=> el.category.toLowerCase().includes(category));
+
+  const total=filterData.reduce((acc,curr)=>(acc + curr.amount),0)
+
   return (
     <table className="expense-table">
       <thead>
         <tr>
           <th>Title</th>
           <th>
-            <select>
+            <select onChange={(e) => setCategory(e.target.value)}>
               <option value="">All</option>
               <option value="grocery">Grocery</option>
               <option value="clothes">Clothes</option>
@@ -42,15 +48,20 @@ export const ExpenseTable = ({expense}) => {
         </tr>
       </thead>
       <tbody>
-        {expense.map(({id,title,category,amount})=>{
-          return(
-          <tr key={id}>
-            <td>{title}</td>
-            <td>{category}</td>
-            <td>₹{amount}</td>
-          </tr>
-          )
+        {filterData.map(({ id, title, category, amount }) => {
+          return (
+            <tr key={id}>
+              <td>{title}</td>
+              <td>{category}</td>
+              <td>₹{amount}</td>
+            </tr>
+          );
         })}
+        <tr>
+          <th>Total</th>
+          <th></th>
+          <th>₹{total}</th>
+        </tr>
       </tbody>
     </table>
   );
