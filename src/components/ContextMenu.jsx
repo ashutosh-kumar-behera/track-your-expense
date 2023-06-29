@@ -1,11 +1,23 @@
-export const ContextMenu = ({ menuPosition, setMenuPosition, setExpenses, rowId }) => {
+export const ContextMenu = ({
+  menuPosition,
+  setMenuPosition,
+  setExpenses,
+  rowId,
+  setExpense,
+  expenses,
+  setEditingRowId,
+}) => {
   if (!menuPosition.left) return;
 
   return (
     <div className="context-menu" style={menuPosition}>
       <div
         onClick={() => {
-          console.log("Edit");
+          const { title, category, amount } = expenses.find(
+            (expense) => expense.id === rowId
+          );
+          setEditingRowId(rowId)
+          setExpense({ title, category, amount });
           setMenuPosition({});
         }}
       >
@@ -15,7 +27,7 @@ export const ContextMenu = ({ menuPosition, setMenuPosition, setExpenses, rowId 
         onClick={() => {
           setExpenses((prevState) =>
             prevState.filter((expense) => expense.id !== rowId)
-          )
+          );
           setMenuPosition({});
         }}
       >
